@@ -41,7 +41,14 @@ public class CaseReader {
                     endOfFile = true;
                 }
                 else{
-                    String caseData = caseReader.translateCaseLine(line);
+                    String caseData = CaseReader.BLOCK_LINE;
+                    try{
+                        caseData = caseReader.translateCaseLine(line);
+                    }
+                    catch(Exception e){
+                        System.out.println("Something went wrong!");
+                        e.printStackTrace();
+                    }
                     output += caseData;
                 }
             }
@@ -55,6 +62,8 @@ public class CaseReader {
         System.out.println(output);
         
     }
+    
+    public static final String BLOCK_LINE = "-------------------\n";
     
     private String startMonth;
     private int startDay;
@@ -102,7 +111,7 @@ public class CaseReader {
         String work = data[4];
         String comma = Pattern.quote(",");
         String[] history = data[5].split(comma);
-        String output = "-------------------\n";
+        String output = BLOCK_LINE;
         output += name + "\n";
         output += "Started feeling sick on " + displayDateSick + " around " + displayTimeSick + "\n";
         output += "Age: " + age + "\n";
