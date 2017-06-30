@@ -29,7 +29,17 @@ public class CaseReader {
             e.printStackTrace();
         }
         
-        CaseReader caseReader = new CaseReader();
+        CaseReader caseReader;
+        
+        if(args.length == 2){
+            caseReader = new CaseReader(args[1]);
+        }
+        else if(args.length == 3){
+            caseReader = new CaseReader(args[1], Integer.parseInt(args[2]));
+        }
+        else{
+            caseReader = new CaseReader();
+        }
         
         String output = "";
         try{
@@ -70,6 +80,11 @@ public class CaseReader {
     
     public CaseReader(){
         this.startMonth = "January";
+        this.startDay = 1;
+    }
+    
+    public CaseReader(String startMonth){
+        this.startMonth = startMonth;
         this.startDay = 1;
     }
     
