@@ -51,7 +51,7 @@ public class CaseReader {
                     endOfFile = true;
                 }
                 else{
-                    String caseData = CaseReader.BLOCK_LINE;
+                    String caseData = "";//CaseReader.BLOCK_LINE;
                     try{
                         String firstSymbol = line.substring(0, 1);
                         if(!firstSymbol.equals(CaseReader.COMMENT_SYMBOL)){
@@ -108,7 +108,8 @@ public class CaseReader {
     public String translateCaseLine(String line){
         String delimiter = Pattern.quote("%");
         String[] data = line.split(delimiter);
-        String name = "Case #" + data[0];
+        int idNum = Integer.parseInt(data[0]);
+        String name = "Case ID: LT" + String.format("%04d", idNum);
         int age = Integer.parseInt(data[1]);
         int timeSick = Integer.parseInt(data[2]);
         int dateSick = (int)Math.floor(timeSick / 24);
