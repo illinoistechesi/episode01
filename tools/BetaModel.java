@@ -5,10 +5,28 @@ import java.util.ArrayList;
 public class BetaModel {
     
     public static void main(String[] args) {
-        
-        BetaModel model = new BetaModel();
-        model.runSimulation();
-        
+        BetaModel model;
+        if (args.length == 6) {
+            try {
+                int total = Integer.parseInt(args[0]);
+                int infected = Integer.parseInt(args[1]);
+                int encounterPerInfected = Integer.parseInt(args[2]);
+                double transmissionProbability = Double.parseDouble(args[3]);
+                int daysToContagious = Integer.parseInt(args[4]);
+                int daysToHealthy = Integer.parseInt(args[5]);
+                model = new BetaModel(total, infected, encounterPerInfected, transmissionProbability, daysToContagious, daysToHealthy);
+                model.runSimulation();
+            }
+            catch (Exception e) {
+                System.out.println("Error: Something went wrong.");
+                e.printStackTrace();
+            }
+        }
+        else {
+            System.out.println("Warning: Impromper arguments, running default.");
+            model = new BetaModel();
+            model.runSimulation();
+        }
     }
     
     private int encounters = 10;
@@ -16,22 +34,32 @@ public class BetaModel {
     private int daysToContagious = 1;
     private int daysToHealthy = 2;
     private int[] population = {95, 0, 5, 0};
-    private final int MAX_TURNS = 5;
-    private final boolean SHOW_TIMELINE = true;
-    private List<int[]> history = new ArrayList<int[]>();
+    private final int MAX_TURNS = 1000;
+    private final boolean SHOW_TIMELINE = false;
+    private List<int[]> transitions = new ArrayList<int[]>();
     
     public BetaModel() {
         
-
-        
+    }
+    
+    public BetaModel(int total, int infected, int encounters, double transmission, int contagion, int recovery) {
+        this.population[0] = total - infected;
+        this.population[1] = 0;
+        this.population[2] = infected;
+        this.population[3] = 0;
+        this.encounters = encounters;
+        this.transmissionProbability = transmission;
+        this.daysToContagious = contagion;
+        this.daysToHealthy = recovery;
     }
     
     public void runSimulation() {
         boolean outbreakActive = true;
         int outbreakPeak = 0;
         int turns = 0;
+        int[] initialChange = {population[1], population[2], population[3]};
+        transitions.add(initialChange);
         while (outbreakActive && turns < MAX_TURNS) {
-            history.add(population);
             if (SHOW_TIMELINE) {
                 String snapshot = populationToString(population, getCurrentDay());
                 System.out.println(snapshot);
@@ -41,7 +69,7 @@ public class BetaModel {
             if (numberInfected > outbreakPeak) {
                 outbreakPeak = numberInfected;
             }
-            boolean allHealthy = numberInfected == 0;
+            boolean allHealthy = numberInfected <= 0;
             if (allHealthy) {
                 outbreakActive = false;
             }
@@ -49,44 +77,32 @@ public class BetaModel {
                 turns++;
             }
         }
-        int outbreakLength = getCurrentDay() + 1;
+        int outbreakLength = getCurrentDay();
         int totalInfected = population[3];
         System.out.println("Outbreak Lasted " + outbreakLength + " days.");
         System.out.println("At peak, " + outbreakPeak + " people were infected.");
         System.out.println("In total, " + totalInfected + " people were infected.");
     }
     
-    public int[] getNextPopulationLevel(int[] inpop) {
-        int[] current = {0,0,0,0};
-        current[0] = inpop[0];
-        current[1] = inpop[1];
-        current[2] = inpop[2];
-        current[3] = inpop[3];
-        for(int j = 0; j < history.size(); j++){
-            //System.out.println(">>> " +populationToString(history.get(j), j));
-        }
+    public int[] getNextPopulationLevel(int[] current) {
         int[] next = current;
         int totalEncounters = current[2] * encounters;
         if (totalEncounters > current[0]) {
             totalEncounters = current[0];
         }
         int becomeExposed = (int) Math.round(totalEncounters * transmissionProbability);
-        int infectionDate = (getCurrentDay() - daysToContagious) + 1;
-        int recoveryDate = (getCurrentDay() - daysToHealthy) + 1;
         int becomeInfected = 0;
         int becomeHealthy = 0;
-        //System.out.println(history.size() + ", " + infectionDate + ", " + recoveryDate);
+        int infectionDate = (getCurrentDay() - daysToContagious) + 1;
+        int recoveryDate = (getCurrentDay() - daysToHealthy) + 1;
         if (infectionDate >= 0) {
-            int[] entry = history.get(infectionDate);
-            becomeInfected = history.get(infectionDate)[1];
-            //System.out.println("Entry at index " + infectionDate + ": S: " + entry[0] + ", E: " + entry[1] + ", I: " + entry[2] + ", R: " + entry[3]);
+            becomeInfected = transitions.get(infectionDate)[0];
         }
         if (recoveryDate >= 0) {
-            int[] z = history.get(recoveryDate);
-            becomeHealthy = history.get(recoveryDate)[2];
-            //System.out.println("Entry at index " + recoveryDate + ": S: " + z[0] + ", E: " + z[1] + ", I: " + z[2] + ", R: " + z[3]);
+            becomeHealthy = transitions.get(recoveryDate)[1];
         }
-        //System.out.println(becomeInfected + ", " + becomeHealthy);
+        int[] change = {becomeExposed, becomeInfected, becomeHealthy};
+        transitions.add(change);
         next[0] = current[0] - becomeExposed;
         next[1] = (current[1] - becomeInfected) + becomeExposed;
         next[2] = (current[2] - becomeHealthy) + becomeInfected;
@@ -95,7 +111,7 @@ public class BetaModel {
     }
     
     public int getCurrentDay() {
-        return history.size()  - 1;
+        return transitions.size() - 1;
     }
     
     public String populationToString(int current[], int day) {
