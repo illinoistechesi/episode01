@@ -6,15 +6,14 @@ public class BetaModel {
     
     public static void main(String[] args) {
         BetaModel model;
-        if (args.length == 6) {
+        if (args.length == 5) {
             try {
                 int total = Integer.parseInt(args[0]);
                 double infected = Double.parseDouble(args[1]);
                 double transmissionProbability = Double.parseDouble(args[2]);
-                int encounterPerInfected = Integer.parseInt(args[3]);
-                int daysToContagious = Integer.parseInt(args[4]);
-                int daysToHealthy = Integer.parseInt(args[5]);
-                model = new BetaModel(total, infected, transmissionProbability, encounterPerInfected, daysToContagious, daysToHealthy);
+                int daysToContagious = Integer.parseInt(args[3]);
+                int daysToHealthy = Integer.parseInt(args[4]);
+                model = new BetaModel(total, infected, transmissionProbability, daysToContagious, daysToHealthy);
                 model.runSimulation();
             }
             catch (Exception e) {
@@ -29,7 +28,6 @@ public class BetaModel {
         }
     }
     
-    private int encounters = 10;
     private double transmissionProbability = 0.3;
     private int daysToContagious = 1;
     private int daysToHealthy = 2;
@@ -42,13 +40,12 @@ public class BetaModel {
         
     }
     
-    public BetaModel(int total, double infected, double transmission, int encounters, int contagion, int recovery) {
+    public BetaModel(int total, double infected, double transmission, int contagion, int recovery) {
         int numberInfected = (int) Math.round(total * infected);
         this.population[0] = total - numberInfected;
         this.population[1] = 0;
         this.population[2] = numberInfected;
         this.population[3] = 0;
-        this.encounters = encounters;
         this.transmissionProbability = transmission;
         this.daysToContagious = contagion;
         this.daysToHealthy = recovery;
@@ -87,11 +84,10 @@ public class BetaModel {
     
     public int[] getNextPopulationLevel(int[] current) {
         int[] next = current;
-        int totalEncounters = current[2] * encounters;
-        if (totalEncounters > current[0]) {
-            totalEncounters = current[0];
+        int becomeExposed = (int) Math.round(current[2] * transmissionProbability);
+        if (becomeExposed > current[0]) {
+            becomeExposed = current[0];
         }
-        int becomeExposed = (int) Math.round(totalEncounters * transmissionProbability);
         int becomeInfected = 0;
         int becomeHealthy = 0;
         int infectionDate = (getCurrentDay() - daysToContagious) + 1;

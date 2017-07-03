@@ -56,9 +56,9 @@ $ javac tools/AlphaModel.java
 $ java tools.AlphaModel total infected beta gamma
 ```
 - total: total number of people in the city
-- infected: percentage of population infected
-- beta: probability of becoming infected
-- gamma: probability of becoming healthy
+- infected: ratio of population infected initially
+- beta: rate of people becoming infected per day
+- gamma: rate of people becoming healthy per day
 
 #### Output
 ```
@@ -76,20 +76,19 @@ Makes predictions about an outbreak based on given parameters.
 #### Instructions
 ```
 $ javac tools/BetaModel.java
-$ java tools.BetaModel total infected encounters transmission contagion recovery
+$ java tools.BetaModel total infected transmission contagion recovery
 ```
 - total: total number of people in the city
 - infected: percentage of population infected
-- encounters: number of healthy people an infected person comes in contact with
-- transmission: probability of an encounter leading to exposure
-- contagion: number of days between exposure and sickness
-- recovery: number of days between exposure and recovery
+- transmission: rate of exposure per interaction with sick person
+- contagion: number of days between exposure and becoming contagious
+- recovery: number of days between exposure and becoming healthy
 
 #### Output
 ```
-$ java tools.BetaModel 1000 0.05 0.3 10 1 5
+$ java tools.BetaModel 1000 0.05 0.07 1 5
 
-Outbreak Lasted 25 days.
-At peak, 727 people were infected.
-In total, 999 people were infected.
+Outbreak Lasted 17 days.
+At peak, 62 people were infected.
+In total, 76 people were infected.
 ```
