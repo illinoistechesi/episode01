@@ -9,12 +9,12 @@ public class BetaModel {
         if (args.length == 6) {
             try {
                 int total = Integer.parseInt(args[0]);
-                int infected = Integer.parseInt(args[1]);
-                int encounterPerInfected = Integer.parseInt(args[2]);
-                double transmissionProbability = Double.parseDouble(args[3]);
+                double infected = Double.parseDouble(args[1]);
+                double transmissionProbability = Double.parseDouble(args[2]);
+                int encounterPerInfected = Integer.parseInt(args[3]);
                 int daysToContagious = Integer.parseInt(args[4]);
                 int daysToHealthy = Integer.parseInt(args[5]);
-                model = new BetaModel(total, infected, encounterPerInfected, transmissionProbability, daysToContagious, daysToHealthy);
+                model = new BetaModel(total, infected, transmissionProbability, encounterPerInfected, daysToContagious, daysToHealthy);
                 model.runSimulation();
             }
             catch (Exception e) {
@@ -42,10 +42,11 @@ public class BetaModel {
         
     }
     
-    public BetaModel(int total, int infected, int encounters, double transmission, int contagion, int recovery) {
-        this.population[0] = total - infected;
+    public BetaModel(int total, double infected, double transmission, int encounters, int contagion, int recovery) {
+        int numberInfected = (int) Math.round(total * infected);
+        this.population[0] = total - numberInfected;
         this.population[1] = 0;
-        this.population[2] = infected;
+        this.population[2] = numberInfected;
         this.population[3] = 0;
         this.encounters = encounters;
         this.transmissionProbability = transmission;
