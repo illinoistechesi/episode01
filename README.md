@@ -21,7 +21,6 @@ Converts encoded data about people who have gotten sick into a human-readable fo
 ```
 $ javac tools/*java
 $ java tools.CaseReader filename month day
-
 ```
 - filename: which file to decode
 - month: name of month when case monitoring began
