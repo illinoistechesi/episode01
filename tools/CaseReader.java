@@ -109,7 +109,7 @@ public class CaseReader {
         String delimiter = Pattern.quote("%");
         String[] data = line.split(delimiter);
         int idNum = Integer.parseInt(data[0]);
-        String name = "Case ID: LT" + String.format("%04d", idNum);
+        String name = "Case ID: UP" + String.format("%04d", idNum);
         int age = Integer.parseInt(data[1]);
         int timeSick = Integer.parseInt(data[2]);
         int dateSick = (int)Math.floor(timeSick / 24);

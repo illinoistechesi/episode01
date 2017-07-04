@@ -13,6 +13,10 @@ java ProgramName
 
 ## CLI Tools Included
 
+- [CaseReader](#casereader)
+- [AlphaModel](#alphamodel)
+- [BetaModel](#betamodel)
+
 ### CaseReader
 
 Converts encoded data about people who have gotten sick into a human-readable format.
