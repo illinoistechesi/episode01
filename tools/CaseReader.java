@@ -53,7 +53,7 @@ public class CaseReader {
                 else{
                     String caseData = "";//CaseReader.BLOCK_LINE;
                     try{
-                        String firstSymbol = line.substring(0, 1);
+                        String firstSymbol = line.substring(0, 2);
                         if(!firstSymbol.equals(CaseReader.COMMENT_SYMBOL)){
                             caseData = caseReader.translateCaseLine(line);   
                         }
@@ -77,7 +77,7 @@ public class CaseReader {
     }
     
     public static final String BLOCK_LINE = "-------------------\n";
-    public static final String COMMENT_SYMBOL = "#";
+    public static final String COMMENT_SYMBOL = "//";
     
     private String startMonth;
     private int startDay;

@@ -1,0 +1,5 @@
+// Initial Cases (This is a comment)
+0%27%199%24%Convenience Store (G)%2,18,8,18,19,17,16,9
+149%36%223%114%Restaurant 16 (R)%15,2,1,19,15,19,15,14,14
+74%29%224%71%Restaurant 2 (R)%9,16,4,5,9,2,19,6,3
+// Add Additional Cases Below
