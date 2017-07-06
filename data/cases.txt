@@ -1,5 +1,5 @@
 // Initial Cases (This is a comment)
-65%29%199%66%Restaurant 16 (R)%2,15,19,14,17,15,14,3
-128%25%199%101%Restaurant 13 (R)%2,6,9,13,10,12,7,6
-79%36%223%74%Restaurant 5 (R)%5,2,10,5,9,7,7,1,5
+26%37%199%41%Restaurant 7 (R)%2,12,9,19,11,10,11,18
+78%29%204%71%Restaurant 2 (R)%5,10,19,1,4,2,9,2,7
+93%31%223%79%Restaurant 19 (R)%18,2,2,20,3,15,8,14,9
 // Add Additional Cases Below
